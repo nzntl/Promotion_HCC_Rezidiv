@@ -994,19 +994,21 @@ if (length(int_forest) > 0) {
     geom_errorbar(aes(xmin = lo, xmax = hi), orientation = "y", width = 0.2,
                   linewidth = 0.55, colour = "grey30") +
     geom_vline(xintercept = 1, linetype = "dashed", colour = "grey50") +
-    geom_label(aes(label = sprintf("%.2f (%.2f–%.2f), n = %d", hr, lo, hi, n)),
-               hjust = -0.12, vjust = 0, nudge_y = 0.38,
+    # Zahl rechts neben dem oberen Intervallende, damit die Zeilen eng stehen.
+    geom_label(aes(x = hi,
+                   label = sprintf("%.2f (%.2f–%.2f), n = %d", hr, lo, hi, n)),
+               hjust = -0.08, vjust = 0.5,
                size = 3.0, colour = "grey20", fill = "white", linewidth = 0,
                label.padding = unit(0.08, "lines")) +
     scale_x_log10(breaks = c(0.5, 1, 2, 3, 5),
                   expand = expansion(mult = c(0.05, 0.55))) +
-    scale_y_discrete(expand = expansion(add = c(0.5, 0.9))) +
+    scale_y_discrete(expand = expansion(add = c(0.45, 0.45))) +
     facet_wrap(~ block, ncol = 1, scales = "free_y") +
     labs(x = "Hazard Ratio (log-Skala)", y = NULL) +
     theme_minimal(base_family = "sans") +
     theme(strip.text = element_text(size = 9, hjust = 0))
   ggsave(file.path(fig_dir, "Abb_Interactions_Forest.png"), plot = p_int_fig,
-         width = 9, height = 7.5, dpi = 300, bg = "white")
+         width = 9, height = 6, dpi = 300, bg = "white")
 }
 
 

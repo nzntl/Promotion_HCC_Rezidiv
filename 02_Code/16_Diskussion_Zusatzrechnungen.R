@@ -1,9 +1,26 @@
 # 16_Diskussion_Zusatzrechnungen.R -- Zusatzrechnungen zu Abschnitt 4.3.3 (Selektionskaskade, Messgroesse).
 # Liest 01_Daten/data_static.xlsx, data_dynamic.xlsx, data_dynamic_surv.xlsx und
-# 01_Daten/20260817_bildgebungstermine_alle.xlsx (Blatt "Termine_lang"). Schreibt nur ins Protokoll.
+# 01_Daten/20260817_bildgebungstermine_alle.xlsx (Blatt "Termine_lang").
+# Schreibt 03_Tables_Figures/Zusatzrechnungen_4_3_3.txt und dieselben Zeilen auf die Konsole.
+# Die hier berechneten Zahlen stehen im Text, aber in keiner Tabelle; die Datei macht sie nachlesbar.
 # Voraussetzung: 06b_Cox_Chan_Postop.R lief in derselben Sitzung (Objekte fitD und sdat_D).
 suppressPackageStartupMessages({ library(readxl); library(dplyr); library(survival) })
-td <- function(...) cat(sprintf("[textdiag-4.3.3] %s\n", sprintf(...)))
+
+out_path <- file.path("03_Tables_Figures", "Zusatzrechnungen_4_3_3.txt")
+if (!dir.exists(dirname(out_path))) dir.create(dirname(out_path), recursive = TRUE)
+con_out <- file(out_path, open = "w", encoding = "UTF-8")
+writeLines(c(
+  "Zusatzrechnungen zu den Abschnitten 4.3.2 und 4.3.3 der Dissertation",
+  "Quelle: 02_Code/16_Diskussion_Zusatzrechnungen.R",
+  paste("Lauf:", format(Sys.time(), "%Y-%m-%d %H:%M:%S")),
+  "Jede Zeile entspricht einer Zahl, die im Text genannt wird und in keiner Tabelle steht.",
+  ""), con_out)
+
+td <- function(...) {
+  zeile <- sprintf("[textdiag-4.3.3] %s", sprintf(...))
+  cat(zeile, "\n", sep = "")
+  writeLines(zeile, con_out)
+}
 
 stat <- read_xlsx("01_Daten/data_static.xlsx") |>
   filter(is.na(Rezidivtumor) | tolower(as.character(Rezidivtumor)) != "ja")
@@ -79,3 +96,19 @@ if (file.exists(tf)) {
   anteil(tm |> filter(Tage_nach_OP <= 0) |> arrange(Pseudonym, Tage_nach_OP) |> group_by(Pseudonym) |> slice_tail(n = 1) |> ungroup(),
          "Modalitaet, praeoperative Basismessung je Person")
 }
+
+# 8) Teilgruppe mit LVR im Nam-Fenster POD 91-180 (Zahlen aus 4.3.2)
+lvr_nam  <- suppressWarnings(as.numeric(an$LVR_nam))
+lvr_snap <- suppressWarnings(as.numeric(an$TLV_first_postop)) / suppressWarnings(as.numeric(an$FLV))
+inw <- !is.na(lvr_nam)
+td("Gesamtkohorte: n=%d, Rezidive=%d, Ereignisrate %.1f %%", nrow(an), sum(rec), 100 * mean(rec))
+td("Teilgruppe mit LVR im Fenster POD 91-180: n=%d, Rezidive=%d, Ereignisrate %.1f %%",
+   sum(inw), sum(inw & rec), 100 * mean(rec[inw]))
+td("Davon dieselbe Messung wie die Momentaufnahme (erste Volumetrie faellt selbst ins Fenster): %d",
+   sum(inw & pod1 >= 91 & pod1 <= 180, na.rm = TRUE))
+td("Spearman-Korrelation der beiden LVR-Fassungen: r=%.2f (n=%d)",
+   cor(lvr_nam, lvr_snap, method = "spearman", use = "complete.obs"),
+   sum(!is.na(lvr_nam) & !is.na(lvr_snap)))
+
+close(con_out)
+cat(sprintf("[textdiag-4.3.3] Ausgabe geschrieben nach %s\n", out_path))
