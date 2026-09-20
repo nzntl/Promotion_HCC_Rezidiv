@@ -1,0 +1,93 @@
+{
+  "Cox-LASSO": [
+    {
+      "outer_fold": 0,
+      "l1_ratio": 0.1448557947862761,
+      "alpha_min_ratio": 0.1630503117378011
+    },
+    {
+      "outer_fold": 1,
+      "l1_ratio": 0.8211260238753291,
+      "alpha_min_ratio": 0.14638880013802563
+    },
+    {
+      "outer_fold": 2,
+      "l1_ratio": 0.6834930956294885,
+      "alpha_min_ratio": 0.03877423734353606
+    },
+    {
+      "outer_fold": 3,
+      "l1_ratio": 0.8490573171442217,
+      "alpha_min_ratio": 0.03666243276008536
+    },
+    {
+      "outer_fold": 4,
+      "l1_ratio": 0.11194641495717111,
+      "alpha_min_ratio": 0.17726404998616688
+    }
+  ],
+  "RSF": [
+    {
+      "outer_fold": 0,
+      "n_estimators": 300,
+      "max_depth": 4,
+      "min_samples_leaf": 11
+    },
+    {
+      "outer_fold": 1,
+      "n_estimators": 300,
+      "max_depth": 6,
+      "min_samples_leaf": 10
+    },
+    {
+      "outer_fold": 2,
+      "n_estimators": 400,
+      "max_depth": 3,
+      "min_samples_leaf": 16
+    },
+    {
+      "outer_fold": 3,
+      "n_estimators": 300,
+      "max_depth": 3,
+      "min_samples_leaf": 6
+    },
+    {
+      "outer_fold": 4,
+      "n_estimators": 400,
+      "max_depth": 7,
+      "min_samples_leaf": 17
+    }
+  ],
+  "GBSA": [
+    {
+      "outer_fold": 0,
+      "n_estimators": 400,
+      "learning_rate": 0.0741521298949827,
+      "max_depth": 2
+    },
+    {
+      "outer_fold": 1,
+      "n_estimators": 100,
+      "learning_rate": 0.09989771315050398,
+      "max_depth": 5
+    },
+    {
+      "outer_fold": 2,
+      "n_estimators": 100,
+      "learning_rate": 0.07311053363236682,
+      "max_depth": 2
+    },
+    {
+      "outer_fold": 3,
+      "n_estimators": 300,
+      "learning_rate": 0.022855553313086942,
+      "max_depth": 2
+    },
+    {
+      "outer_fold": 4,
+      "n_estimators": 400,
+      "learning_rate": 0.02804981615615602,
+      "max_depth": 2
+    }
+  ]
+}
